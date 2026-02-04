@@ -16,18 +16,22 @@ import { actions as selectPostActions } from './features/posts/selectedPost';
 
 export const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { loaded, hasError, posts } = useAppSelector(state => state.postsList);
-  const currentUser = useAppSelector(state => state.selectUser);
-  const selectedPost = useAppSelector(state => state.selectPost);
+  const {
+    items: loaded,
+    hasError,
+    posts,
+  } = useAppSelector(state => state.posts);
+  const { author } = useAppSelector(state => state.author);
+  const { post } = useAppSelector(state => state.selectPost);
 
   useEffect(() => {
     dispatch(selectPostActions.setSelected(null));
-    if (currentUser) {
-      dispatch(init(currentUser.id));
+    if (author) {
+      dispatch(init(author.id));
     } else {
       dispatch(postsActions.setPosts([]));
     }
-  }, [currentUser]);
+  }, [author]);
 
   return (
     <main className="section">
@@ -39,13 +43,11 @@ export const App: React.FC = () => {
                 <UserSelector />
               </div>
               <div className="block" data-cy="MainContent">
-                {!currentUser && (
-                  <p data-cy="NoSelectedUser">No user selected</p>
-                )}
+                {!author && <p data-cy="NoSelectedUser">No user selected</p>}
 
-                {currentUser && loaded && <Loader />}
+                {author && loaded && <Loader />}
 
-                {currentUser && !loaded && hasError && (
+                {author && !loaded && hasError && (
                   <div
                     className="notification is-danger"
                     data-cy="PostsLoadingError"
@@ -54,14 +56,14 @@ export const App: React.FC = () => {
                   </div>
                 )}
 
-                {currentUser && !loaded && !hasError && posts.length === 0 && (
+                {author && !loaded && !hasError && posts.length === 0 && (
                   <div className="notification is-warning" data-cy="NoPostsYet">
                     No posts yet
                   </div>
                 )}
 
-                {currentUser && !loaded && !hasError && posts.length > 0 && (
-                  <PostsList posts={posts} selectedPostId={selectedPost?.id} />
+                {author && !loaded && !hasError && posts.length > 0 && (
+                  <PostsList posts={posts} selectedPostId={post?.id} />
                 )}
               </div>
             </div>
@@ -75,12 +77,12 @@ export const App: React.FC = () => {
               'is-8-desktop',
               'Sidebar',
               {
-                'Sidebar--open': selectedPost,
+                'Sidebar--open': post,
               },
             )}
           >
             <div className="tile is-child box is-success ">
-              {selectedPost && <PostDetails post={selectedPost} />}
+              {post && <PostDetails post={post} />}
             </div>
           </div>
         </div>

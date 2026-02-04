@@ -7,7 +7,7 @@ import { actions as selectUserActions } from '../features/posts/selectUser';
 
 export const UserSelector: React.FC = () => {
   const users = useAppSelector(state => state.users);
-  const currentUser = useAppSelector(state => state.selectUser);
+  const { author } = useAppSelector(state => state.author);
   const dispatch = useAppDispatch();
 
   const [expanded, setExpanded] = useState(false);
@@ -54,7 +54,7 @@ export const UserSelector: React.FC = () => {
             setExpanded(current => !current);
           }}
         >
-          <span>{currentUser?.name || 'Choose a user'}</span>
+          <span>{author?.name || 'Choose a user'}</span>
 
           <span className="icon is-small">
             <i className="fas fa-angle-down" aria-hidden="true" />
@@ -72,7 +72,7 @@ export const UserSelector: React.FC = () => {
                 dispatch(selectUserActions.setSelected(user));
               }}
               className={classNames('dropdown-item', {
-                'is-active': user.id === currentUser?.id,
+                'is-active': user.id === author?.id,
               })}
             >
               {user.name}

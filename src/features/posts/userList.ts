@@ -13,8 +13,6 @@ export const { reducer, actions } = createSlice({
     setList: (_users, action: PayloadAction<User[]>) => action.payload,
   },
   extraReducers: builder => {
-    builder.addCase(init.fulfilled, (_user, action) => {
-      return action.payload;
-    });
+    builder.addCase(init.fulfilled, (_user, action) => action.payload);
   },
 });

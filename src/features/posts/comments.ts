@@ -5,7 +5,7 @@ import { getPostComments } from '../../api/comments';
 type CommentType = {
   loaded: boolean;
   hasError: string;
-  items: Comment[] | [];
+  items: Comment[];
 };
 
 const initialState: CommentType = {
@@ -19,7 +19,7 @@ export const init = createAsyncThunk('post/fetch', (postId: number) =>
 );
 
 export const { reducer, actions } = createSlice({
-  name: 'comment',
+  name: 'comments',
   initialState,
   reducers: {
     addComment: (state, action) => ({
@@ -40,16 +40,16 @@ export const { reducer, actions } = createSlice({
   extraReducers: builder => {
     builder.addCase(init.pending, state => ({
       ...state,
-      loaded: false,
+      loaded: true,
     }));
     builder.addCase(init.fulfilled, (state, action) => ({
       ...state,
       items: action.payload,
-      loaded: true,
+      loaded: false,
     }));
     builder.addCase(init.rejected, state => ({
       ...state,
-      loaded: true,
+      loaded: false,
       hasError: 'error',
     }));
   },

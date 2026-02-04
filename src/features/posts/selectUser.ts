@@ -1,12 +1,20 @@
+/* eslint-disable no-param-reassign */
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '../../types/User';
 
-const initialState: User | null = null;
+export interface SelectedAuthor {
+  author: User | null;
+}
 
-export const { reducer, actions } = createSlice<User | null>({
-  name: 'selectUser',
+const initialState: SelectedAuthor = { author: null };
+
+export const { reducer, actions } = createSlice({
+  name: 'author',
   initialState,
   reducers: {
-    setSelected: (_post, action: PayloadAction<User | null>) => action.payload,
+    setSelected: (state, action: PayloadAction<User | null>) => {
+      state.author = action.payload;
+    },
   },
 });

@@ -77,12 +77,16 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
   };
 
   const deleteComment = async (commentId: number) => {
-    dispatch(commentsActions.deleteComment(commentId));
+    try {
+      dispatch(commentsActions.deleteComment(commentId));
+      await deleteCommentAPI(commentId);
+    } catch (error) {
+      dispatch(commentsActions.setError());
+    }
 
     // we delete the comment immediately so as
     // not to make the user wait long for the actual deletion
     // eslint-disable-next-line max-len
-    await deleteCommentAPI(commentId);
   };
 
   return (
@@ -94,21 +98,21 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
       </div>
 
       <div className="block">
-        {!loaded && <Loader />}
+        {loaded && <Loader />}
 
-        {loaded && hasError && (
+        {!loaded && hasError && (
           <div className="notification is-danger" data-cy="CommentsError">
             Something went wrong
           </div>
         )}
 
-        {loaded && !hasError && items.length === 0 && (
+        {!loaded && !hasError && items.length === 0 && (
           <p className="title is-4" data-cy="NoCommentsMessage">
             No comments yet
           </p>
         )}
 
-        {loaded && !hasError && items.length > 0 && (
+        {!loaded && !hasError && items.length > 0 && (
           <>
             <p className="title is-4">Comments:</p>
 
@@ -142,7 +146,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
           </>
         )}
 
-        {loaded && !hasError && !visible && (
+        {!loaded && !hasError && !visible && (
           <button
             data-cy="WriteCommentButton"
             type="button"
@@ -153,7 +157,7 @@ export const PostDetails: React.FC<Props> = ({ post }) => {
           </button>
         )}
 
-        {loaded && !hasError && visible && (
+        {!loaded && !hasError && visible && (
           <NewCommentForm onSubmit={addComment} />
         )}
       </div>
