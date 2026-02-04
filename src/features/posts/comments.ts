@@ -4,13 +4,13 @@ import { getPostComments } from '../../api/comments';
 
 type CommentType = {
   loaded: boolean;
-  hasError: string;
+  hasError: boolean;
   items: Comment[];
 };
 
 const initialState: CommentType = {
   loaded: false,
-  hasError: '',
+  hasError: false,
   items: [],
 };
 
@@ -34,7 +34,7 @@ export const { reducer, actions } = createSlice({
 
     setError: state => ({
       ...state,
-      hasError: 'error',
+      hasError: true,
     }),
   },
   extraReducers: builder => {
@@ -50,7 +50,7 @@ export const { reducer, actions } = createSlice({
     builder.addCase(init.rejected, state => ({
       ...state,
       loaded: false,
-      hasError: 'error',
+      hasError: true,
     }));
   },
 });
