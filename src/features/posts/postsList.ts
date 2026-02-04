@@ -3,14 +3,14 @@ import { Post } from '../../types/Post';
 import { getUserPosts } from '../../api/posts';
 
 type UserState = {
-  posts: Post[];
-  items: boolean;
+  items: Post[];
+  loaded: boolean;
   hasError: boolean;
 };
 
 const initialState: UserState = {
-  posts: [],
-  items: false,
+  items: [],
+  loaded: false,
   hasError: false,
 };
 
@@ -24,24 +24,24 @@ export const { reducer, actions } = createSlice({
   reducers: {
     setPosts: (state, action: PayloadAction<Post[]>) => ({
       ...state,
-      posts: action.payload,
+      items: action.payload,
     }),
   },
   extraReducers: builder => {
     builder.addCase(init.pending, state => ({
       ...state,
-      items: true,
+      loaded: true,
     }));
 
     builder.addCase(init.fulfilled, (state, action) => ({
       ...state,
-      posts: action.payload,
-      items: false,
+      items: action.payload,
+      loaded: false,
     }));
 
     builder.addCase(init.rejected, state => ({
       ...state,
-      items: false,
+      loaded: false,
       hasError: true,
     }));
   },

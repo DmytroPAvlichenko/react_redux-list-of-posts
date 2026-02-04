@@ -16,11 +16,7 @@ import { actions as selectPostActions } from './features/posts/selectedPost';
 
 export const App: React.FC = () => {
   const dispatch = useAppDispatch();
-  const {
-    items: loaded,
-    hasError,
-    posts,
-  } = useAppSelector(state => state.posts);
+  const { loaded, hasError, items } = useAppSelector(state => state.posts);
   const { author } = useAppSelector(state => state.author);
   const { post } = useAppSelector(state => state.selectPost);
 
@@ -56,14 +52,14 @@ export const App: React.FC = () => {
                   </div>
                 )}
 
-                {author && !loaded && !hasError && posts.length === 0 && (
+                {author && !loaded && !hasError && items.length === 0 && (
                   <div className="notification is-warning" data-cy="NoPostsYet">
                     No posts yet
                   </div>
                 )}
 
-                {author && !loaded && !hasError && posts.length > 0 && (
-                  <PostsList posts={posts} selectedPostId={post?.id} />
+                {author && !loaded && !hasError && items.length > 0 && (
+                  <PostsList posts={items} selectedPostId={post?.id} />
                 )}
               </div>
             </div>
